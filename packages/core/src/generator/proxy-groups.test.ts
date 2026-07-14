@@ -437,6 +437,55 @@ describe("proxy group generator", () => {
     });
   });
 
+  it("uses the source format and matching cache extension for custom rule providers", () => {
+    const providers = generateRuleProviders({
+      nodes: [node("Node A")],
+      enabledModules: [],
+      ruleProviderBaseUrl: "https://rules.example.com",
+      testUrl: "https://probe.example.com/204",
+      testInterval: 120,
+      customRuleSets: [
+        {
+          id: "yaml-rule",
+          name: "YAML rule",
+          behavior: "domain",
+          path: "https://cdn.example.com/rules/custom.yaml?download=1",
+          target: "DIRECT",
+        },
+        {
+          id: "text-rule",
+          name: "Text rule",
+          behavior: "domain",
+          path: "https://cdn.example.com/rules/custom.list#latest",
+          target: "DIRECT",
+        },
+        {
+          id: "mrs-rule",
+          name: "MRS rule",
+          behavior: "ipcidr",
+          path: "geoip/custom.mrs",
+          target: "DIRECT",
+        },
+      ],
+    });
+
+    expect(providers["yaml-rule"]).toMatchObject({
+      url: "https://cdn.example.com/rules/custom.yaml?download=1",
+      path: "./ruleset/yaml-rule.yaml",
+      format: "yaml",
+    });
+    expect(providers["text-rule"]).toMatchObject({
+      url: "https://cdn.example.com/rules/custom.list#latest",
+      path: "./ruleset/text-rule.txt",
+      format: "text",
+    });
+    expect(providers["mrs-rule"]).toMatchObject({
+      url: "https://rules.example.com/geoip/custom.mrs",
+      path: "./ruleset/mrs-rule.mrs",
+      format: "mrs",
+    });
+  });
+
   it("builds groups without providers while keeping info nodes out of testable groups", () => {
     const groups = generateProxyGroups({
       nodes: [node("余额 | 10GB"), node("Korea Node"), node("US Node")],

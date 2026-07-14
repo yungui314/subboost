@@ -526,13 +526,20 @@ export function generateRuleProviders(options: GenerateOptions): Record<string, 
   for (const ruleSet of customRuleSets) {
     if (customTargetIsDisabled(ruleSet.target, customProxyGroups)) continue;
     if (!ruleSet?.id || !ruleSet.path || providers[ruleSet.id]) continue;
+    const sourcePath = ruleSet.path.split(/[?#]/, 1)[0].toLowerCase();
+    const format = sourcePath.endsWith(".mrs")
+      ? "mrs"
+      : sourcePath.endsWith(".txt") || sourcePath.endsWith(".list")
+        ? "text"
+        : "yaml";
+    const cacheExtension = format === "mrs" ? "mrs" : format === "text" ? "txt" : "yaml";
     providers[ruleSet.id] = {
       type: "http",
       behavior: ruleSet.behavior,
       url: buildRuleSetUrlFromPath(ruleSet.path, ruleProviderBaseUrl),
-      path: `./ruleset/${ruleSet.id}.mrs`,
+      path: `./ruleset/${ruleSet.id}.${cacheExtension}`,
       interval: 86400,
-      format: "mrs",
+      format,
     };
   }
 
