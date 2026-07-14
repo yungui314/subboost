@@ -53,3 +53,17 @@ jobs:
             APP_VERSION_TOKEN=region-fallback
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Export image archive
+        run: |
+          docker pull ghcr.io/${{ github.repository_owner }}/subboost-aethersailor:v2.6.0-region-fallback
+          docker save ghcr.io/${{ github.repository_owner }}/subboost-aethersailor:v2.6.0-region-fallback \
+            | gzip -1 > subboost-v2.6.0-region-fallback.tar.gz
+
+      - name: Upload image archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: subboost-v2.6.0-region-fallback-image
+          path: subboost-v2.6.0-region-fallback.tar.gz
+          retention-days: 3
+          compression-level: 0
