@@ -2,7 +2,7 @@ name: Build region fallback image
 
 on:
   push:
-    branches: [main]
+    branches: [aethersailor-region-fallback]
   workflow_dispatch:
 
 permissions:
