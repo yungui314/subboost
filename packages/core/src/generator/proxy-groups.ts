@@ -232,7 +232,10 @@ export function generateProxyGroups(options: GenerateOptions): ProxyGroup[] {
     buildTypedProxyGroup({
       name,
       groupType,
-      proxies,
+      // Clash rejects empty testable groups. Keep DIRECT as a
+      // generation-time fallback so filtered region groups stay valid while
+      // still showing only matching nodes whenever any are available.
+      proxies: proxies.length > 0 ? proxies : ["DIRECT"],
       testUrl,
       testInterval,
       strategy,

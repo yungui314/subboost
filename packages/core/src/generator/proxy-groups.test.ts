@@ -426,7 +426,7 @@ describe("proxy group generator", () => {
     });
     expect(groups.find((group) => group.name.includes("AI"))).toMatchObject({
       type: "url-test",
-      proxies: [],
+      proxies: ["DIRECT"],
       use: ["remote"],
     });
     expect(groups.find((group) => group.name === "🏠 私有网络")?.proxies?.slice(0, 2)).toEqual(["DIRECT", "REJECT"]);
