@@ -242,6 +242,9 @@ export function parseVLESS(uri: string): VLESSNode {
   const encryption = (params.get("encryption") || params.get("flow-encryption") || "").trim();
   const packetEncoding =
     (params.get("packet-encoding") || params.get("packet_encoding") || params.get("packetEncoding") || "").trim();
+  const tfo = parseBoolish(
+    params.get("tfo") || params.get("fast-open") || params.get("fast_open") || params.get("fastOpen")
+  );
   const pbk = pickQueryValue(params, ["pbk", "public-key", "public_key", "publicKey"]);
   const sid = pickQueryValue(params, ["sid", "short-id", "short_id", "shortId"]);
   const spiderX = params.get("spx") || "";
@@ -289,6 +292,7 @@ export function parseVLESS(uri: string): VLESSNode {
   if (flow) node.flow = flow;
   if (encryption) node.encryption = encryption;
   if (packetEncoding) node["packet-encoding"] = packetEncoding;
+  if (tfo !== undefined) node.tfo = tfo;
   if (alpn) {
     const list = splitList(alpn);
     if (list && list.length > 0) node.alpn = list;

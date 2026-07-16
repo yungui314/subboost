@@ -32,6 +32,7 @@ describe("configToYaml", () => {
           server: "vless.example.com",
           port: 443,
           uuid: "11111111-1111-1111-1111-111111111111",
+          tfo: true,
           udp: "yes",
           fingerprint: "chrome",
           "reality-opts": {
@@ -57,6 +58,7 @@ describe("configToYaml", () => {
     expect(yaml).not.toContain("_internal");
     expect(yaml).toContain("tls: true");
     expect(yaml).toContain("udp: true");
+    expect(yaml).toContain("tfo: true");
     expect(yaml).toContain("client-fingerprint: chrome");
     expect(yaml).toContain(`reality-opts: {public-key: ${REALITY_PUBLIC_KEY}, short-id: "7250"}`);
     expect(yaml).toContain("rules:\n  - MATCH,Select");

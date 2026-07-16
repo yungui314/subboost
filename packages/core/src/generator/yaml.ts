@@ -9,7 +9,7 @@ const PROXY_FIELD_ORDER_PROTOCOL: Partial<Record<KnownNodeType, string[]>> = {
   ss: ["cipher", "password", "udp-over-tcp", "udp-over-tcp-version", "tfo", "plugin", "plugin-opts"],
   ssr: ["cipher", "password", "protocol", "protocol-param", "obfs", "obfs-param"],
   vmess: ["uuid", "alterId", "cipher", "packet-encoding", "authenticated-length", "global-padding"],
-  vless: ["uuid", "encryption", "packet-encoding"],
+  vless: ["uuid", "encryption", "packet-encoding", "tfo"],
   trojan: ["password"],
   anytls: ["password"],
   hysteria: ["protocol", "auth-str", "obfs", "ports", "up", "down"],

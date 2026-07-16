@@ -4,6 +4,16 @@ import { parseVLESS } from "./vless";
 const UUID = "11111111-1111-4111-8111-111111111111";
 
 describe("parseVLESS", () => {
+  it("parses TCP Fast Open aliases", () => {
+    expect(parseVLESS(`vless://${UUID}@tfo.example.com:443?security=tls&tfo=true#TFO`)).toMatchObject({
+      name: "TFO",
+      tfo: true,
+    });
+    expect(parseVLESS(`vless://${UUID}@fast-open.example.com:443?fast-open=1`)).toMatchObject({ tfo: true });
+    expect(parseVLESS(`vless://${UUID}@fast-open-off.example.com:443?fast_open=off`)).toMatchObject({ tfo: false });
+    expect(parseVLESS(`vless://${UUID}@fast-open-invalid.example.com:443?fastOpen=maybe`)).not.toHaveProperty("tfo");
+  });
+
   it("parses HTTP transport with domain fronting and primitive TLS aliases", () => {
     const node = parseVLESS(
       `vless://${UUID}@vless-http.example.com:443?security=tls&type=http&host=front.example.com,alt.example.com&path=/a,/b&method=post&sni=edge.example.com&allow-insecure=1&alpn=h2,http/1.1&packet-encoding=xudp#HTTP`
